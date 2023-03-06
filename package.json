@@ -1,0 +1,12 @@
+{
+	"devDependencies": {
+		"eslint": "^8.34.0",
+		"htmlhint": "^1.1.4",
+		"markdownlint": "^0.27.0",
+		"strip-comments": "^2.0.1",
+		"stylelint": "^14.16.1"
+	},
+	"scripts": {
+		"build": "node .github/build.mjs"
+	}
+}
