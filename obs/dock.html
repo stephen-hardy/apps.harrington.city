@@ -47,6 +47,7 @@
 		}
 		channel.postMessage({ [field]: val });
 		e.setAttribute('value', e.value);
+		e.blur();
 	});
 	document.body.addEventListener('focusin', evt => evt.target.value = '');
 	document.body.addEventListener('focusout', ({ target: e }) => e.value ||= e.getAttribute('value'))

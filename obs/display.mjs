@@ -1,4 +1,5 @@
-let end, interval; const main = document.querySelector('main'), clock = document.getElementById('Clock');
+let end, interval;
+const main = document.querySelector('main'), clock = document.getElementById('Clock'), msgEl = document.getElementById('Messages');
 function time(d = new Date()) { const t = d.toLocaleTimeString(); return t.slice(0, t.indexOf(':') + 3) + t.slice(-2); }
 new BroadcastChannel('coh').onmessage = ({ data }) => {
 	console.log('message', data);
@@ -12,6 +13,7 @@ new BroadcastChannel('coh').onmessage = ({ data }) => {
 		main.className = ''; main.classList.add(data.type.replace(/-|\s/g, ''));
 	}
 	if (data.chair) { document.getElementById('Chair').textContent = data.chair; }
+	(window.obsstudio?.setCurrentScene || console.log.bind(console, 'setCurrentScene'))(end ? 'Muted' : 'Main')
 };
 function countdown() {
 	const diff = end - new Date(), minutes = Math.floor(diff / 60000); let remaining;
@@ -28,24 +30,24 @@ document.getElementById('Date').textContent = new Date().toLocaleDateString();
 	const qrCfg = {
 		// https://github.com/kozakdenys/qr-code-styling
 		// https://qr-code-styling.com
-		type: 'svg', width: 300, height: 300, margin: 10,
+		type: 'canvas', width: 300, height: 300, margin: 10,
 		image: 'qrCenter.svg', imageOptions: { margin: 10 },
 		dotsOptions: { color: '#FFF', type: 'rounded' },
 		backgroundOptions: { color: '#00000060' },
 	};
-	async function img(o) {
-		if (o.img) { return `<img src="${o.img}" class="messageImg">`; }
-		const svg = await (await new QRCodeStyling({ ...qrCfg, data: o.url }).getRawData('svg')).text();
-		return '<svg class="messageImg"' + svg.replace(/^[^]+<svg/, '');
-	}
-	document.getElementById('Messages').innerHTML = (await Promise.all(messages.map(async o => {
-		return '<div class="message">'
+	messages.forEach(o => {
+		msgEl.insertAdjacentHTML('beforeend', '<div class="message">'
 			+ `<h1>${o.header}</h1>`
-			+ await img(o)
+			+ (o.img ? `<img src="${o.img}" class="messageImg">` : '')
 			+ (o.url ? `<a href="${o.url}">${o.url}</a>` : '')
 			+ `<p>${o.description}</p>`
-		+ '</div>';
-	}))).join('');
+		+ '</div>');
+		if (o.url) {
+			new QRCodeStyling({ ...qrCfg, data: o.url }).append(msgEl.lastElementChild);
+			msgEl.lastElementChild.lastElementChild.classList.add('messageImg');
+		}
+	});
+	msgEl.removeAttribute('hidden');
 	function rotateMsgs() {
 		const current = document.querySelector('.message.current') || document.querySelector('.message:last-child'),
 			next = current.nextElementSibling || current.parentElement.firstElementChild;
