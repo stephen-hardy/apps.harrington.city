@@ -1,0 +1,36 @@
+body { height: 100%; margin: 0; font-family: sans-serif; display: flex; flex-direction: column; }
+
+main {
+	flex-grow: 1; padding: 30px;
+	display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;
+	background-color: rgba(30 30 30 / 0.85); border-bottom: 1px solid gray;
+	font-size: 40px; color: white; text-shadow: 0 0 5px rgba(0 0 0 / 0.8);
+	opacity: 0; transition: opacity 1s ease;
+}
+	main.timer:is(.PreStart, .ExecutiveSession) { opacity: 1; }
+	main div { text-align: center; }
+	.pre { display: none; }
+	.PreStart #PreStart { display: inline; }
+	.ExecutiveSession #ESession { display: inline; }
+	#Muted { font-size: 0.7em; }
+	#Messages { position: relative; width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+	.message {
+		position: absolute; display: grid; grid-template-columns: min-content 1fr;
+		grid-template-areas: "img header" "img desc" "img link";
+		column-gap: 40px; opacity: 0; transition: opacity 2s ease;
+	}
+		.message.current { opacity: 1; }
+		.message h1 { grid-area: header; margin: 0; font-size: 1.8em; white-space: nowrap; }
+		.messageImg { height: 300px; width: 300px; grid-area: img; border: 1px solid rgb(80 80 80); border-radius: 10px; }
+			img.messageImg { object-fit: cover; }
+		.message p { grid-area: desc; }
+		.message a { grid-area: link; color: rgb(200 200 255); font-size: 0.7em; }
+footer {
+	display: grid; grid-template-columns: max-content max-content;
+	justify-content: space-between; align-items: center; gap: 10px; padding: 25px;
+	background-color: rgba(30 30 30 / 0.85);
+	font-size: 40px; color: white; text-shadow: 0 0 5px rgba(0 0 0 / 0.8);
+}
+	#Chair::before { content: "Chair: "; }
+	.lower { font-size: 0.75em; }
+	.right { text-align: right; }
