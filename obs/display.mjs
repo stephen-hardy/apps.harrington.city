@@ -37,10 +37,12 @@ document.getElementById('Date').textContent = new Date().toLocaleDateString();
 	};
 	messages.forEach(o => {
 		msgEl.insertAdjacentHTML('beforeend', '<div class="message">'
-			+ `<h1>${o.header}</h1>`
 			+ (o.img ? `<img src="${o.img}" class="messageImg">` : '')
-			+ (o.url ? `<a href="${o.url}">${o.url}</a>` : '')
-			+ `<p>${o.description}</p>`
+			+ '<div class="messageRight">'
+				+ `<h1>${o.header}</h1>`
+				+ `<p>${o.description}</p>`
+				+ `<a href="${o.url || ''}">${o.url || ''}</a>`
+			+ '</div>'
 		+ '</div>');
 		if (o.url) {
 			new QRCodeStyling({ ...qrCfg, data: o.url }).append(msgEl.lastElementChild);

@@ -19,4 +19,8 @@ export default [
 		description: 'Sign up to get emails about general city news,<br>like meeting announcements or service delays.',
 		url: 'http://info.harrington.city',
 	},
+	{ header: 'Regular Meetings',
+		description: 'Our regular meetings are on 2nd & 4th Wednesdays, usually at 7pm, at City Hall and streamed on YouTube',
+		url: 'http://youtube.harrington.city',
+	},
 ];

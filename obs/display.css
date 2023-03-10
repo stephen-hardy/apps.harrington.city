@@ -16,16 +16,17 @@ main {
 	#Muted { font-size: 0.7em; }
 	#Messages { position: relative; width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
 	.message {
-		position: absolute; display: grid; grid-template-columns: min-content 1fr;
-		grid-template-areas: "img header" "img desc" "img link";
-		column-gap: 40px; opacity: 0; transition: opacity 2s ease;
+		position: absolute; display: flex;
+		gap: 40px; opacity: 0; transition: opacity 2s ease;
 	}
 		.message.current { opacity: 1; }
-		.message h1 { grid-area: header; margin: 0; font-size: 1.8em; white-space: nowrap; }
+
 		.messageImg { height: 300px; width: 300px; grid-area: img; border: 1px solid rgb(80 80 80); border-radius: 10px; }
 			img.messageImg { object-fit: cover; }
-		.message p { grid-area: desc; }
-		.message a { grid-area: link; color: rgb(200 200 255); font-size: 0.7em; }
+		.messageRight { display: flex; flex-direction: column; justify-content: space-between; }
+			.message h1 { margin: 0; font-size: 1.8em; white-space: nowrap; }
+			.message p { margin: 0; }
+			.message a { color: rgb(200 200 255); font-size: 0.7em; }
 footer {
 	display: grid; grid-template-columns: max-content max-content;
 	justify-content: space-between; align-items: center; gap: 10px; padding: 25px;

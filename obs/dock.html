@@ -1,54 +1,70 @@
 <body>
-	<input list="chair" name="chair" placeholder="Meeting Chair">
-		<datalist id="chair">
-			<option>Jesse Silhan (Mayor)</option>
-			<option>David Buddrius (Pro-Tem)</option>
-		</datalist>
-	<input list="type" name="type" placeholder="Meeting Type">
-		<datalist id="type">
-			<option>Pre-Start</option>
-			<option>General Meeting</option>
-			<option>Public Hearing</option>
-			<option>Workshop</option>
-			<option>Budget Workshop</option>
-			<option>Executive Session</option>
-		</datalist>
-	<input list="start" name="start" placeholder="Start Time">
-		<datalist id="start">
-			<option>7pm</option>
-			<option>6pm</option>
-			<option>6:30pm</option>
-			<option>7:30pm</option>
-		</datalist>
-	<input list="timer" name="timer" placeholder="Timer Duration">
-		<datalist id="timer">
-			<option>5m</option>
-			<option>10m</option>
-			<option>15m</option>
-			<option>20m</option>
-			<option>30m</option>
-			<option>45m</option>
-		</datalist>
+	<input name="chair" placeholder="Meeting Chair">
+		<dock-opts>
+			<button>Jesse Silhan (Mayor)</button>
+			<button>David Buddrius (Pro-Tem)</button>
+		</dock-opts>
+	<input name="type" placeholder="Meeting Type">
+		<dock-opts>
+			<button>Pre-Start</button>
+			<button>General Meeting</button>
+			<button>Public Hearing</button>
+			<button>Workshop</button>
+			<button>Budget Workshop</button>
+			<button>Executive Session</button>
+		</dock-opts>
+	<input name="start" placeholder="Start Time">
+		<dock-opts id="start">
+			<button>7pm</button>
+			<button>6pm</button>
+			<button>6:30pm</button>
+			<button>7:30pm</button>
+		</dock-opts>
+	<input name="timer" placeholder="Timer Duration">
+		<dock-opts>
+			<button>5m</button>
+			<button>10m</button>
+			<button>15m</button>
+			<button>20m</button>
+			<button>30m</button>
+			<button>45m</button>
+		</dock-opts>
 </body>
 <style>
-	body { display: flex; flex-direction: column; gap: 10px; background-color: #1F212A; }
-	select, input { padding: 5px; background-color: inherit; color: white; border: 1px solid currentcolor; border-radius: 5px; }
+	body { display: flex; flex-direction: column; background-color: #1F212A; }
+	dock-opts {
+		display: flex; flex-direction: column; overflow: hidden;
+		opacity: 0; max-height: 0; transition: 0.6s all ease;
+	}
+		input:focus + dock-opts { margin-bottom: 10px; opacity: 1; max-height: 100%; }
+		button:nth-child(n + 2) { margin-top: 5px; }
+	input { margin-bottom: 10px; padding: 5px; background-color: inherit; color: white; border: 1px solid currentcolor; border-radius: 5px; }
 		[name="start"], [name="timer"] { display: none; }
 		[value="Pre-Start"] ~ [name="start"] { display: block; }
 		[value="Executive Session"] ~ [name="timer"] { display: block; }
 </style>
 <script>
+	channel = new BroadcastChannel('coh');
+	document.body.addEventListener('click', ({ target: e }) => {
+		if (e.nodeName !== 'BUTTON') { return; }
+		const input = e.parentElement.previousElementSibling;
+		input.value = e.textContent;
+		input.dispatchEvent(new CustomEvent('change', { bubbles: true }))
+	});
 	document.body.addEventListener('change', ({ target: e }) => {
-		const channel = new BroadcastChannel('coh'), field = e.name; let val = e.value;
+		const field = e.name; let val = e.value;
 		if (field === 'timer' || field === 'start') {
 			val = new Date();
 			if (field === 'timer') { val.setHours(val.getHours(), val.getMinutes() + parseInt(e.value, 10)); }
-			else { const time = e.value.split(':').map(s => parseInt(s, 10)); val.setHours(time[0] + 12, time[1] || 0, 0, 0); }
+			else {
+				const time = e.value.split(':').map(s => parseInt(s, 10)), pm = e.value.includes('a') ? 0 : 12;
+				val.setHours(time[0] + pm, time[1] || 0, 0, 0);
+			}
 		}
 		channel.postMessage({ [field]: val });
 		e.setAttribute('value', e.value);
 		e.blur();
 	});
 	document.body.addEventListener('focusin', evt => evt.target.value = '');
-	document.body.addEventListener('focusout', ({ target: e }) => e.value ||= e.getAttribute('value'))
+	document.body.addEventListener('focusout', ({ target: e }) => setTimeout(_ => e.value ||= e.getAttribute('value'), 500));
 </script>
