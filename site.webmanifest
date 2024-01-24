@@ -1,0 +1,20 @@
+{
+	"name": "CLM Launchpad",
+	"short_name": "Launchpad",
+	"icons": [
+		{
+			"src": "/launchpad/logo/192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/launchpad/logo/512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	],
+	"start_url": "/launchpad",
+	"theme_color": "#1d3461",
+	"background_color": "#1d3461",
+	"display": "standalone"
+}
