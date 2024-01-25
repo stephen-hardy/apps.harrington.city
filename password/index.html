@@ -1,13 +1,17 @@
 <style>
-    html { margin: 0; height: 100%; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
-    body { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    html { margin: 0; height: 100%; font-size: 24px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+    body {
+        height: 100%; display: flex; flex-direction: column;
+        justify-content: center; align-items: center; gap: 10px;
+    }
+    button { display: absolute; }
 </style>
 <div>My username and password for the Apple ID and Harrington.City is:</div>
-<label>Email: <input type="text" id="Email"><button>Copy</button></label>
-<label>Password: <input type="text" id="Password"><button>Copy</button></label>
+<label>Email: <input type="text" id="Email" readonly><button>Copy</button></label>
+<label>Password: <input type="text" id="Password" readonly><button>Copy</button></label>
 <script>
     const [email, password] = location.hash.slice(1).split('@harrington.city');
-    document.getElementById('Email').value = email;
+    document.getElementById('Email').value = email + '@harrington.city';
     document.getElementById('Password').value = password;
     document.body.addEventListener('click', evt => {
         if (evt.target.nodeName !== 'BUTTON') { return; }
