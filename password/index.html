@@ -1,0 +1,7 @@
+<label>Email: <input type="text" id="Email"></label>
+<label>Password: <input type="text" id="Password"></label>
+<script>
+    const [email, password] = location.hash.slice(1).split('@harrington.city');
+    document.getElementById('Email').value = email;
+    document.getElementById('Password').value = password;
+</script>
